@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <title>Биология: СОР и СОЧ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: sans-serif;
-      max-width: 800px;
+      font-family: 'Inter', sans-serif;
+      max-width: 900px;
       margin: auto;
       padding: 2em;
-      background-color: #f4f6f8;
+      background-color: #f0f2f5;
+      color: #333;
     }
     h1 {
       color: #2E5C92;
@@ -19,31 +21,39 @@
     }
     .block {
       background: white;
-      border-radius: 10px;
-      padding: 1.5em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 1em;
+      border-radius: 16px;
+      padding: 2em;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      margin-bottom: 2em;
+      transition: transform 0.3s ease;
+    }
+    .block:hover {
+      transform: translateY(-2px);
     }
     input, textarea {
       width: 100%;
-      padding: 0.5em;
-      margin-top: 0.3em;
+      padding: 0.75em;
+      margin-top: 0.5em;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 1em;
     }
     button {
-      padding: 0.5em 1.2em;
+      padding: 0.6em 1.4em;
       margin: 0.5em 0.5em 0 0;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 1em;
     }
     .start { background: #2E5C92; color: white; }
     .next { background: #4CAF50; color: white; }
     .back { background: #ccc; }
+    .danger { background: #d63333; color: white; }
     .timer {
       text-align: center;
-      font-size: 1.3em;
+      font-size: 1.4em;
       font-weight: bold;
       color: #d63333;
     }
@@ -58,23 +68,30 @@
       margin-top: 1em;
       border-radius: 5px;
     }
-    /* Добавляем стили для политики конфиденциальности */
     .privacy-policy {
-        font-size: 0.9em;
-        color: #555;
-        border-top: 1px solid #eee;
-        padding-top: 1em;
-        margin-top: 1em;
+      font-size: 0.95em;
+      color: #555;
+      border-top: 1px solid #eee;
+      padding-top: 1em;
+      margin-top: 1em;
     }
     .privacy-policy h4 {
-        margin-top: 0;
-        color: #2E5C92;
+      margin-top: 0;
+      color: #2E5C92;
+    }
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 1em;
+      }
+      .block {
+        padding: 1em;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1> «Биология: СОР и СОЧ»</h1>
+<h1>«Биология: СОР и СОЧ»</h1>
 
 <div class="block" id="start-screen">
   <label>ФИО:<span style="color: red;">*</span></label>
@@ -85,14 +102,8 @@
   <p><b>Макс. баллы за СОР: 12 | СОЧ: 30</b></p>
 
   <div class="privacy-policy">
-      <h4>Политика конфиденциальности</h4>
-      <p>В данном приложении для начала тестирования требуется ввод Ваших Фамилии, Имени, Отчества (ФИО) и Класса. Эти данные используются исключительно для:</p>
-      <ul>
-          <li>Идентификации Ваших результатов теста.</li>
-          <li>Хранения Ваших результатов теста локально в Вашем браузере для последующего доступа администратором (например, для просмотра, экспорта или корректировки баллов).</li>
-      </ul>
-      <p>Ваши ФИО и класс не передаются третьим лицам и не отправляются на удаленные серверы. Все данные сохраняются только на Вашем устройстве.</p>
-      <p>Продолжая использование приложения, Вы соглашаетесь с данной политикой конфиденциальности.</p>
+    <h4>Политика конфиденциальности</h4>
+    <p>Ваши данные используются только для идентификации и не передаются третьим лицам.</p>
   </div>
   <button class="start" onclick="startTest('SOR')">Начать СОР</button>
   <button class="start" onclick="startTest('SOCH')">Начать СОЧ</button>
@@ -118,60 +129,11 @@
   <p><strong>Итоговый балл:</strong> <span id="total-score"></span></p>
 </div>
 
-<button onclick="showAdminPanel()" style="position:fixed;bottom:10px;right:10px;background:#444;color:white;padding:0.5em 1em;border-radius:5px;">Панель администратора</button>
+<button onclick="showAdminPanel()" style="position:fixed;bottom:10px;right:10px;background:#2E5C92;color:white;padding:0.5em 1em;border-radius:5px;font-weight:600;">Панель администратора</button>
 
 <script>
 const questions = [
   {
-    <!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Распределение факторов</title>
-</head>
-<body>
-  <h2>Биотические факторы</h2>
-  <ul id="biotic"></ul>
-
-  <h2>Абиотические факторы</h2>
-  <ul id="abiotic"></ul>
-
-  <h2>Антропогенные факторы</h2>
-  <ul id="anthropogenic"></ul>
-
-  <script>
-    const factors = {
-      1: "Температура воздуха",
-      2: "Отношения хищник – жертва",
-      3: "Деревья разной высоты в смешанном лесу",
-      4: "Ловля рыбы",
-      5: "Выращивание пшеницы",
-      6: "Выпадение осадков летом",
-      7: "Солнечный свет",
-      8: "Травля насекомых",
-      9: "Борьба двух скворцов за скворечник"
-    };
-
-    const biotic = [2, 3, 9];
-    const abiotic = [1, 6, 7];
-    const anthropogenic = [4, 5, 8];
-
-    function fillList(ids, array) {
-      const list = document.getElementById(ids);
-      array.forEach(num => {
-        const li = document.createElement("li");
-        li.textContent = `${num}. ${factors[num]}`;
-        list.appendChild(li);
-      });
-    }
-
-    fillList("biotic", biotic);
-    fillList("abiotic", abiotic);
-    fillList("anthropogenic", anthropogenic);
-  </script>
-</body>
-</html>
-
     type: "КО",
     question: "Назовите орган, в котором происходит дыхание растений.",
     score: 2
@@ -182,324 +144,8 @@ const questions = [
     score: 3
   }
 ];
-
-let current = 0;
-let timerInterval;
-let seconds = 0;
-let totalScore = 0;
-let currentMode = "";
-let answers = [];
-let testSubmitted = false;
-
-// Function to prevent closing or navigating away during the test
-function preventTabClosing(event) {
-  if (testSubmitted) return; // Allow closing after test is submitted
-  event.preventDefault();
-  event.returnValue = ''; // Standard for most browsers
-  return ''; // For older browsers
-}
-
-function startTest(mode) {
-  const fioInput = document.getElementById("fio");
-  const klassInput = document.getElementById("klass");
-
-  if (!fioInput.value.trim()) {
-    alert("Пожалуйста, введите ваше ФИО для начала теста.");
-    fioInput.focus();
-    return;
-  }
-  if (!klassInput.value.trim()) {
-    alert("Пожалуйста, введите ваш Класс для начала теста.");
-    klassInput.focus();
-    return;
-  }
-
-  currentMode = mode;
-  document.getElementById("start-screen").style.display = "none";
-  document.getElementById("test-screen").style.display = "block";
-
-  seconds = mode === "SOR" ? 20 * 60 : 45 * 60; // Set time based on mode
-  updateTimer(); // Display initial time immediately
-
-  // Start timer only when questions are displayed
-  timerInterval = setInterval(() => {
-    seconds--;
-    updateTimer();
-    if (seconds <= 0) {
-      clearInterval(timerInterval);
-      finishTest();
-    }
-  }, 1000);
-
-  // Activate prevention of tab closing
-  window.addEventListener('beforeunload', preventTabClosing);
-
-  renderQuestion();
-}
-
-function updateTimer() {
-  const min = Math.floor(seconds / 60);
-  const sec = ("0" + (seconds % 60)).slice(-2);
-  document.getElementById("timer").innerText = `Осталось: ${min}:${sec}`;
-}
-
-function renderQuestion() {
-  const q = questions[current];
-  document.getElementById("q-type").innerText = q.type;
-  document.getElementById("q-text").innerText = q.question;
-  document.getElementById("q-options").innerHTML = "";
-  document.getElementById("q-answer").style.display = "none";
-  document.getElementById("question-score").innerText = `Балл: ${q.score}`;
-
-  if (q.type === "МВО") {
-    q.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt;
-      btn.className = "next";
-      btn.onclick = () => {
-        // Only add score if not finished yet
-        if (!testSubmitted && opt === q.correct) totalScore += q.score;
-        answers.push(`${q.question}\nОтвет: ${opt}`);
-        nextQuestion();
-      };
-      document.getElementById("q-options").appendChild(btn);
-    });
-  } else {
-    document.getElementById("q-answer").style.display = "block";
-    // If returning to a КО/РО question, pre-fill with saved answer if exists
-    const existingAnswer = answers.find(a => a.startsWith(q.question));
-    if (existingAnswer) {
-        document.getElementById("q-answer").value = existingAnswer.split('\nОтвет: ')[1] || '';
-    }
-  }
-}
-
-function nextQuestion() {
-  const q = questions[current];
-  if (q.type !== "МВО") {
-    const written = document.getElementById("q-answer").value;
-    // Before pushing new answer, check if an answer for this question already exists
-    // and remove it to prevent duplicates if user goes back and forth
-    const existingAnswerIndex = answers.findIndex(a => a.startsWith(q.question));
-    if (existingAnswerIndex !== -1) {
-        answers[existingAnswerIndex] = `${q.question}\nОтвет: ${written}`; // Update existing answer
-    } else {
-        answers.push(`${q.question}\nОтвет: ${written}`);
-    }
-
-    // For КО/РО, scores are added here. If these are meant for manual grading, remove this line.
-    // For now, keeping it as per original logic.
-    if (!testSubmitted) { // Prevent score changes after submission
-        // In a real app, KO/RO would likely be graded by an instructor, not automatically.
-        // This line implies automatic full score for answering.
-        // totalScore += q.score; // This line would be removed if KO/RO are solely manual graded.
-    }
-    document.getElementById("q-answer").value = "";
-  }
-
-  if (current < questions.length - 1) {
-    current++;
-    renderQuestion();
-  } else {
-    finishTest();
-  }
-}
-
-function confirmFinish() {
-  if (confirm("Вы точно хотите завершить тест?")) {
-    finishTest();
-  }
-}
-
-function prevQuestion() {
-  if (current > 0) {
-    // Save current question's answer before moving back
-    const q = questions[current];
-    if (q.type !== "МВО") {
-        const written = document.getElementById("q-answer").value;
-        const existingAnswerIndex = answers.findIndex(a => a.startsWith(q.question));
-        if (existingAnswerIndex !== -1) {
-            answers[existingAnswerIndex] = `${q.question}\nОтвет: ${written}`;
-        } else {
-            answers.push(`${q.question}\nОтвет: ${written}`);
-        }
-    }
-    current--;
-    renderQuestion();
-  }
-}
-
-
-function finishTest() {
-  if (testSubmitted) return;
-  testSubmitted = true;
-  clearInterval(timerInterval);
-  window.removeEventListener('beforeunload', preventTabClosing); // Allow closing tab after test
-
-  // Save the answer for the last question if it's not MVO before showing results
-  const q = questions[current];
-  if (q.type !== "МВО") {
-    const written = document.getElementById("q-answer").value;
-    const existingAnswerIndex = answers.findIndex(a => a.startsWith(q.question));
-    if (existingAnswerIndex !== -1) {
-        answers[existingAnswerIndex] = `${q.question}\nОтвет: ${written}`;
-    } else {
-        answers.push(`${q.question}\nОтвет: ${written}`);
-    }
-  }
-
-
-  document.getElementById("test-screen").style.display = "none";
-  document.getElementById("result-screen").style.display = "block";
-  document.getElementById("result-fio").innerText = document.getElementById("fio").value;
-  document.getElementById("result-klass").innerText = document.getElementById("klass").value;
-  document.getElementById("total-score").innerText = totalScore;
-  document.getElementById("result-title").innerText = currentMode === "SOR" ? "СОР завершен" : "СОЧ завершен";
-  saveResultLocally();
-}
-
-function saveResultLocally() {
-  const result = {
-    fio: document.getElementById("fio").value,
-    klass: document.getElementById("klass").value,
-    mode: currentMode,
-    score: totalScore,
-    answers: answers,
-    timestamp: new Date().toISOString()
-  };
-  const existing = JSON.parse(localStorage.getItem("biology_results") || "[]");
-  existing.push(result);
-  localStorage.setItem("biology_results", JSON.stringify(existing));
-}
-
-function exportResultsToCSV() {
-  const results = JSON.parse(localStorage.getItem("biology_results") || "[]");
-  if (!results.length) return alert("Нет данных для экспорта");
-  let csv = "ФИО,Класс,Тип,Балл,Дата,Ответы\n"; // Added 'Ответы' column
-  results.forEach(r => {
-    // Escape answers for CSV (handle commas, newlines, quotes)
-    const escapedAnswers = r.answers.map(ans => `"${ans.replace(/"/g, '""').replace(/\n/g, '\\n')}"`).join('; ');
-    csv += `${r.fio},${r.klass},${r.mode},${r.score},${new Date(r.timestamp).toLocaleString()},${escapedAnswers}\n`;
-  });
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.setAttribute("href", URL.createObjectURL(blob));
-  link.setAttribute("download", "результаты_биология.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-function exportResultsToPDF() {
-  const results = JSON.parse(localStorage.getItem("biology_results") || "[]");
-  if (!results.length) return alert("Нет данных для экспорта");
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFontSize(12);
-  doc.text("Результаты тестов", 10, 10);
-  let y = 20;
-  results.forEach((r, i) => {
-    doc.text(`${i+1}. ${r.fio}, Класс: ${r.klass}, Тип: ${r.mode}, Балл: ${r.score}, ${new Date(r.timestamp).toLocaleString()}`, 10, y);
-    y += 8;
-    if (y > 270) { doc.addPage(); y = 20; }
-
-    // Add answers to PDF
-    r.answers.forEach(ans => {
-        const lines = doc.splitTextToSize(ans, 180); // Max width 180mm
-        lines.forEach(line => {
-            doc.text(line, 15, y);
-            y += 7;
-            if (y > 270) { doc.addPage(); y = 20; }
-        });
-    });
-    y += 5; // Add some space after each result's answers
-    if (y > 270) { doc.addPage(); y = 20; }
-  });
-  doc.save("результаты_биология.pdf");
-}
-
-function showAdminPanel() {
-  const pass = prompt("Введите пароль администратора:");
-  if (pass !== "admin123") return;
-  const results = JSON.parse(localStorage.getItem("biology_results") || "[]");
-  let html = `<h2>Результаты</h2>
-    <table border="1" cellpadding="5">
-      <tr>
-        <th>ФИО</th>
-        <th>Класс</th>
-        <th>Тип</th>
-        <th>Балл</th>
-        <th>Дата</th>
-        <th>Ответы</th>
-        <th>Действия</th>
-      </tr>
-      ${results.map((r, index) => `
-        <tr>
-          <td>${r.fio}</td>
-          <td>${r.klass}</td>
-          <td>${r.mode}</td>
-          <td id="score-${index}">${r.score}</td>
-          <td>${new Date(r.timestamp).toLocaleString()}</td>
-          <td>
-            ${r.answers.map(ans => `<div>${ans.replace(/\n/g, '<br>')}</div>`).join('<hr style="margin: 2px 0;">')}
-          </td>
-          <td>
-            <input type="number" id="manual_admin_score_${index}" value="${r.score}" min="0" max="30" style="width: 60px;">
-            <button onclick="window.opener.updateAdminScore(${index})">Обновить</button>
-            <button onclick="window.opener.deleteResult(${index})">Удалить</button>
-          </td>
-        </tr>
-      `).join('')}
-    </table>
-    <br>
-    <button onclick="window.opener.exportResultsToCSV()">Скачать Excel (CSV)</button>
-    <button onclick="window.opener.exportResultsToPDF()">Скачать PDF</button>
-    <button onclick="window.opener.clearAllResults()" style="background-color: #dc3545; color: white;">Очистить все результаты</button>
-    `;
-  const w = window.open();
-  w.document.write(`<html><head><title>Админ-панель</title><style>table {width: 100%; border-collapse: collapse;} th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd;} input[type="number"] {padding: 3px; border-radius: 3px; border: 1px solid #ccc;} button {margin-left: 5px; padding: 5px 10px; border-radius: 5px; border: none; cursor: pointer;}</style></head><body>${html}</body></html>`);
-}
-
-function updateAdminScore(index) {
-    const w = window.open("", "_self"); // Reference to the admin panel window
-    const newScore = parseInt(w.document.getElementById(`manual_admin_score_${index}`).value);
-    if (isNaN(newScore) || newScore < 0 || newScore > 30) {
-        alert("Балл должен быть числом от 0 до 30.");
-        return;
-    }
-    const results = JSON.parse(localStorage.getItem("biology_results") || "[]");
-    if (results[index]) {
-        results[index].score = newScore;
-        localStorage.setItem("biology_results", JSON.stringify(results));
-        w.document.getElementById(`score-${index}`).innerText = newScore;
-        alert("Балл обновлен!");
-    }
-}
-
-function deleteResult(index) {
-    if (!confirm("Вы уверены, что хотите удалить этот результат?")) {
-        return;
-    }
-    const w = window.open("", "_self"); // Reference to the admin panel window
-    let results = JSON.parse(localStorage.getItem("biology_results") || "[]");
-    if (results[index]) {
-        results.splice(index, 1);
-        localStorage.setItem("biology_results", JSON.stringify(results));
-        w.location.reload(); // Reload admin panel to reflect changes
-    }
-}
-
-function clearAllResults() {
-    if (!confirm("Вы уверены, что хотите удалить ВСЕ результаты? Это действие необратимо!")) {
-        return;
-    }
-    localStorage.removeItem("biology_results");
-    const w = window.open("", "_self"); // Reference to the admin panel window
-    w.location.reload(); // Reload admin panel
-    alert("Все результаты удалены.");
-}
-
 </script>
-
+<script src="main.js"></script>
 </body>
 </html>
+
