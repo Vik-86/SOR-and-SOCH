@@ -123,13 +123,55 @@
 <script>
 const questions = [
   {
-    type: "МВО",
-    question: "Какой орган отвечает за фотосинтез?",
-    options: ["Кора", "Лист", "Корень", "Цветок"],
-    correct: "Лист",
-    score: 1
-  },
-  {
+    <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Распределение факторов</title>
+</head>
+<body>
+  <h2>Биотические факторы</h2>
+  <ul id="biotic"></ul>
+
+  <h2>Абиотические факторы</h2>
+  <ul id="abiotic"></ul>
+
+  <h2>Антропогенные факторы</h2>
+  <ul id="anthropogenic"></ul>
+
+  <script>
+    const factors = {
+      1: "Температура воздуха",
+      2: "Отношения хищник – жертва",
+      3: "Деревья разной высоты в смешанном лесу",
+      4: "Ловля рыбы",
+      5: "Выращивание пшеницы",
+      6: "Выпадение осадков летом",
+      7: "Солнечный свет",
+      8: "Травля насекомых",
+      9: "Борьба двух скворцов за скворечник"
+    };
+
+    const biotic = [2, 3, 9];
+    const abiotic = [1, 6, 7];
+    const anthropogenic = [4, 5, 8];
+
+    function fillList(ids, array) {
+      const list = document.getElementById(ids);
+      array.forEach(num => {
+        const li = document.createElement("li");
+        li.textContent = `${num}. ${factors[num]}`;
+        list.appendChild(li);
+      });
+    }
+
+    fillList("biotic", biotic);
+    fillList("abiotic", abiotic);
+    fillList("anthropogenic", anthropogenic);
+  </script>
+</body>
+</html>
+
     type: "КО",
     question: "Назовите орган, в котором происходит дыхание растений.",
     score: 2
