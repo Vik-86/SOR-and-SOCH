@@ -48,7 +48,7 @@
       font-size: 1em;
     }
     .start { background: #2E5C92; color: white; }
-    .next { background: #4CAF50; color: white; } /* Добавлено */
+    .next { background: #4CAF50; color: white; }
     .back { background: #ccc; }
     .danger { background: #d63333; color: white; }
     .timer {
@@ -73,7 +73,6 @@
       margin-top: 0;
       color: #2E5C92;
     }
-    /* === Добавленные стили для админ-панели === */
     #admin-panel-screen {
       padding: 2em;
     }
@@ -93,7 +92,7 @@
       margin-right: 0.5em;
       padding: 0.5em 1em;
       border-radius: 5px;
-      background: #2E5C92; /* Общий стиль для кнопок админ-панели */
+      background: #2E5C92;
       color: white;
       border: none;
       cursor: pointer;
@@ -110,11 +109,22 @@
       color: #2E5C92;
     }
     .ro-score-input {
-        width: 80px; /* Уменьшаем ширину поля для ввода баллов */
+        width: 80px;
         display: inline-block;
         margin-left: 0.5em;
     }
-    /* ======================================= */
+    /* Новый стиль для динамически добавляемой кнопки */
+    .admin-button-fixed {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: #2E5C92;
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 5px;
+        font-weight: 600;
+        z-index: 1000; /* Убедимся, что кнопка поверх других элементов */
+    }
 
     @media screen and (max-width: 600px) {
       body {
@@ -153,7 +163,7 @@
     <button class="back" onclick="prevQuestion()">Назад</button>
     <button class="next next-question-btn" onclick="nextQuestion()">Далее</button>
     <button class="next finish-test-btn" onclick="confirmFinish()" style="display:none;">Завершить</button>
-    </div>
+  </div>
   <div class="score" id="question-score"></div>
 </div>
 
@@ -166,13 +176,13 @@
 
 <div class="block" id="admin-panel-screen" style="display:none;">
   <div id="admin-submissions-list">
-    </div>
+  </div>
   <div id="admin-submission-details" style="display:none;">
     <div id="admin-question-view"></div>
-    </div>
+  </div>
   <button onclick="backToMainScreen()" style="margin-top: 1em;">Вернуться на главный экран</button>
 </div>
-<button onclick="showAdminPanel()" style="position:fixed;bottom:10px;right:10px;background:#2E5C92;color:white;padding:0.5em 1em;border-radius:5px;font-weight:600;">Панель администратора</button>
+
 <script src="questions.js"></script>
 <script src="main.js"></script>
 </body>
