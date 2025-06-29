@@ -37,6 +37,7 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1em;
+      box-sizing: border-box; /* Добавлено для корректного расчета ширины с padding и border */
     }
     button {
       padding: 0.6em 1.4em;
@@ -62,12 +63,6 @@
       font-size: 1.2em;
       margin-top: 1em;
     }
-    .manual-score {
-      background: #fff8dc;
-      padding: 0.5em;
-      margin-top: 1em;
-      border-radius: 5px;
-    }
     .privacy-policy {
       font-size: 0.95em;
       color: #555;
@@ -87,20 +82,24 @@
         padding: 1em;
       }
     }
+    /* Добавленные стили для скрытия кнопки "Завершить" и "Далее" */
+    #test-screen .next-question-btn { /* Для кнопки "Далее" */
+      display: inline-block;
+    }
+    #test-screen .finish-test-btn { /* Для кнопки "Завершить" */
+      display: none; /* Скрываем по умолчанию */
+    }
   </style>
 </head>
 <body>
-
 <h1>«Биология: СОР и СОЧ»</h1>
-
 <div class="block" id="start-screen">
-  <label>ФИО:<span style="color: red;">*</span></label>
+  <label for="fio">ФИО:<span style="color: red;">*</span></label>
   <input id="fio" type="text" required>
-  <label>Класс:<span style="color: red;">*</span></label>
+  <label for="klass">Класс:<span style="color: red;">*</span></label>
   <input id="klass" type="text" required>
   <p><b>Цели обучения:</b></p>
   <p><b>Макс. баллы за СОР: 12 | СОЧ: 30</b></p>
-
   <div class="privacy-policy">
     <h4>Политика конфиденциальности</h4>
     <p>Ваши данные используются только для идентификации и не передаются третьим лицам.</p>
@@ -108,36 +107,26 @@
   <button class="start" onclick="startTest('SOR')">Начать СОР</button>
   <button class="start" onclick="startTest('SOCH')">Начать СОЧ</button>
 </div>
-
 <div class="block" id="test-screen" style="display:none;">
   <div class="timer" id="timer"></div>
   <p><b>Тип:</b> <span id="q-type"></span></p>
   <p id="q-text"></p>
-  <div id="q-options"></div>
-  <textarea id="q-answer" rows="4" style="display:none;" placeholder="Ваш ответ..."></textarea>
+  <textarea id="q-answer" rows="4" placeholder="Ваш ответ..."></textarea>
   <div>
     <button class="back" onclick="prevQuestion()">Назад</button>
-    <button class="next" onclick="confirmFinish()">Завершить</button>
+    <button class="next next-question-btn" onclick="nextQuestion()">Далее</button>
+    <button class="danger finish-test-btn" onclick="confirmFinish()">Завершить</button>
   </div>
   <div class="score" id="question-score"></div>
 </div>
-
 <div class="block" id="result-screen" style="display:none;">
   <h3 id="result-title"></h3>
   <p><strong>ФИО:</strong> <span id="result-fio"></span></p>
   <p><strong>Класс:</strong> <span id="result-klass"></span></p>
   <p><strong>Итоговый балл:</strong> <span id="total-score"></span></p>
 </div>
-
 <button onclick="showAdminPanel()" style="position:fixed;bottom:10px;right:10px;background:#2E5C92;color:white;padding:0.5em 1em;border-radius:5px;font-weight:600;">Панель администратора</button>
-
-<!-- Подключение внешнего файла с вопросами -->
 <script src="questions.js"></script>
-
-<!-- Основной скрипт -->
 <script src="main.js"></script>
-
 </body>
 </html>
-
-
