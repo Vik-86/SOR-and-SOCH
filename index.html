@@ -37,7 +37,6 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1em;
-      box-sizing: border-box; /* Добавлено для корректного расчета ширины с padding и border */
     }
     button {
       padding: 0.6em 1.4em;
@@ -49,7 +48,7 @@
       font-size: 1em;
     }
     .start { background: #2E5C92; color: white; }
-    .next { background: #4CAF50; color: white; }
+    .next { background: #4CAF50; color: white; } /* Добавлено */
     .back { background: #ccc; }
     .danger { background: #d63333; color: white; }
     .timer {
@@ -74,6 +73,49 @@
       margin-top: 0;
       color: #2E5C92;
     }
+    /* === Добавленные стили для админ-панели === */
+    #admin-panel-screen {
+      padding: 2em;
+    }
+    #admin-submissions-list ul {
+      list-style: none;
+      padding: 0;
+    }
+    #admin-submissions-list li {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    #admin-submissions-list button, #admin-submission-details button {
+      margin-right: 0.5em;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      background: #2E5C92; /* Общий стиль для кнопок админ-панели */
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .question-block-admin {
+      border: 1px dashed #ddd;
+      padding: 1em;
+      margin-bottom: 1em;
+      background: #fff;
+      border-radius: 8px;
+    }
+    .question-block-admin h4 {
+      margin-top: 0;
+      color: #2E5C92;
+    }
+    .ro-score-input {
+        width: 80px; /* Уменьшаем ширину поля для ввода баллов */
+        display: inline-block;
+        margin-left: 0.5em;
+    }
+    /* ======================================= */
+
     @media screen and (max-width: 600px) {
       body {
         padding: 1em;
@@ -82,21 +124,14 @@
         padding: 1em;
       }
     }
-    /* Добавленные стили для скрытия кнопки "Завершить" и "Далее" */
-    #test-screen .next-question-btn { /* Для кнопки "Далее" */
-      display: inline-block;
-    }
-    #test-screen .finish-test-btn { /* Для кнопки "Завершить" */
-      display: none; /* Скрываем по умолчанию */
-    }
   </style>
 </head>
 <body>
 <h1>«Биология: СОР и СОЧ»</h1>
 <div class="block" id="start-screen">
-  <label for="fio">ФИО:<span style="color: red;">*</span></label>
+  <label>ФИО:<span style="color: red;">*</span></label>
   <input id="fio" type="text" required>
-  <label for="klass">Класс:<span style="color: red;">*</span></label>
+  <label>Класс:<span style="color: red;">*</span></label>
   <input id="klass" type="text" required>
   <p><b>Цели обучения:</b></p>
   <p><b>Макс. баллы за СОР: 12 | СОЧ: 30</b></p>
@@ -107,23 +142,35 @@
   <button class="start" onclick="startTest('SOR')">Начать СОР</button>
   <button class="start" onclick="startTest('SOCH')">Начать СОЧ</button>
 </div>
+
 <div class="block" id="test-screen" style="display:none;">
   <div class="timer" id="timer"></div>
   <p><b>Тип:</b> <span id="q-type"></span></p>
   <p id="q-text"></p>
+  <div id="q-options"></div>
   <textarea id="q-answer" rows="4" placeholder="Ваш ответ..."></textarea>
   <div>
     <button class="back" onclick="prevQuestion()">Назад</button>
     <button class="next next-question-btn" onclick="nextQuestion()">Далее</button>
-    <button class="danger finish-test-btn" onclick="confirmFinish()">Завершить</button>
-  </div>
+    <button class="next finish-test-btn" onclick="confirmFinish()" style="display:none;">Завершить</button>
+    </div>
   <div class="score" id="question-score"></div>
 </div>
+
 <div class="block" id="result-screen" style="display:none;">
   <h3 id="result-title"></h3>
   <p><strong>ФИО:</strong> <span id="result-fio"></span></p>
   <p><strong>Класс:</strong> <span id="result-klass"></span></p>
   <p><strong>Итоговый балл:</strong> <span id="total-score"></span></p>
+</div>
+
+<div class="block" id="admin-panel-screen" style="display:none;">
+  <div id="admin-submissions-list">
+    </div>
+  <div id="admin-submission-details" style="display:none;">
+    <div id="admin-question-view"></div>
+    </div>
+  <button onclick="backToMainScreen()" style="margin-top: 1em;">Вернуться на главный экран</button>
 </div>
 <button onclick="showAdminPanel()" style="position:fixed;bottom:10px;right:10px;background:#2E5C92;color:white;padding:0.5em 1em;border-radius:5px;font-weight:600;">Панель администратора</button>
 <script src="questions.js"></script>
