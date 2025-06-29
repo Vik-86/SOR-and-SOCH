@@ -7,7 +7,6 @@ function startTest(type) {
   testType = type;
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("test-screen").style.display = "block";
-  // Устанавливаем таймер в зависимости от типа теста
   startTimer(type === "SOR" ? 20 : 40);
   showQuestion();
 }
@@ -21,7 +20,7 @@ function startTimer(minutes) {
     timerEl.textContent = `Осталось: ${min}:${sec}`;
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      confirmFinish(); // Автоматическое завершение по истечении времени
+      confirmFinish();
     }
     timeLeft--;
   }, 1000);
@@ -62,20 +61,18 @@ function nextQuestion() {
     currentIndex++;
     showQuestion();
   } else {
-    confirmFinish(); // Завершаем тест, если это был последний вопрос
+    confirmFinish();
   }
 }
 
-// ==== КОРРЕКТИРОВКА: Обновленная confirmFinish для сохранения в localStorage ====
 function confirmFinish() {
-  answers[currentIndex] = document.getElementById("q-answer").value; // Сохраняем последний ответ
+  answers[currentIndex] = document.getElementById("q-answer").value;
 
   document.getElementById("test-screen").style.display = "none";
   document.getElementById("result-screen").style.display = "block";
   clearInterval(timerInterval);
 
   let autoScore = 0;
-  // Подсчитываем баллы только за КО вопросы автоматически
   questions.forEach((q, i) => {
     const userAnswer = answers[i]?.trim().toLowerCase();
     const correct = q.correctAnswer?.trim().toLowerCase();
@@ -86,7 +83,6 @@ function confirmFinish() {
 
   const studentFio = document.getElementById("fio").value;
   const studentKlass = document.getElementById("klass").value;
-  // Генерируем уникальный ID для каждой попытки (ФИО + Класс + метка времени)
   const submissionId = `${studentFio}-${studentKlass}-${Date.now()}`;
 
   const submissionData = {
@@ -95,10 +91,10 @@ function confirmFinish() {
     klass: studentKlass,
     testType: testType,
     answers: answers,
-    autoScore: autoScore, // Баллы за вопросы КО
-    manualScoresRO: Array(questions.length).fill(0), // Массив для ручных баллов РО, инициализируем нулями
-    finalScore: autoScore, // Итоговый балл, пока только авто, обновится после ручной проверки
-    isGraded: false, // Флаг, указывающий, была ли ручная проверка РО вопросов
+    autoScore: autoScore,
+    manualScoresRO: Array(questions.length).fill(0),
+    finalScore: autoScore,
+    isGraded: false,
     timestamp: new Date().toISOString()
   };
 
@@ -106,32 +102,29 @@ function confirmFinish() {
   submissions.push(submissionData);
   localStorage.setItem('testSubmissions', JSON.stringify(submissions));
 
-  // Отображаем на экране результатов только то, что знаем сразу (ФИО, Класс, Авто-балл)
   document.getElementById("result-fio").textContent = studentFio;
   document.getElementById("result-klass").textContent = studentKlass;
-  document.getElementById("total-score").textContent = autoScore; // Пока показываем только авто-балл
+  document.getElementById("total-score").textContent = autoScore;
   document.getElementById("result-title").textContent = `${testType} завершен`;
-  // Можно добавить примечание, что окончательный балл будет доступен после проверки.
 }
 
-// ==== КОРРЕКТИРОВКА: Функции для админ-панели ====
 function showAdminPanel() {
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("test-screen").style.display = "none";
   document.getElementById("result-screen").style.display = "none";
-  document.getElementById("admin-panel-screen").style.display = "block"; // Показываем админ-панель
-  document.getElementById("admin-submission-details").style.display = "none"; // Скрываем детали конкретной сдачи
+  document.getElementById("admin-panel-screen").style.display = "block";
+  document.getElementById("admin-submission-details").style.display = "none";
 
   loadAdminSubmissionsList();
 }
 
 function loadAdminSubmissionsList() {
-  document.getElementById("admin-submissions-list").style.display = "block"; // Показываем список
-  document.getElementById("admin-submission-details").style.display = "none"; // Скрываем детали
+  document.getElementById("admin-submissions-list").style.display = "block";
+  document.getElementById("admin-submission-details").style.display = "none";
 
   let submissions = JSON.parse(localStorage.getItem('testSubmissions')) || [];
   const adminSubmissionsListEl = document.getElementById('admin-submissions-list');
-  adminSubmissionsListEl.innerHTML = '<h2>Список сданных тестов</h2>'; // Очищаем и добавляем заголовок
+  adminSubmissionsListEl.innerHTML = '<h2>Список сданных тестов</h2>';
 
   if (submissions.length === 0) {
     adminSubmissionsListEl.innerHTML += '<p>Нет сданных тестов.</p>';
@@ -153,15 +146,15 @@ function loadAdminSubmissionsList() {
   adminSubmissionsListEl.appendChild(listUl);
 }
 
-let currentAdminSubmissionIndex = -1; // Для отслеживания текущей просматриваемой работы
+let currentAdminSubmissionIndex = -1;
 
 function viewSubmission(index) {
   currentAdminSubmissionIndex = index;
   let submissions = JSON.parse(localStorage.getItem('testSubmissions')) || [];
   const sub = submissions[index];
 
-  document.getElementById("admin-submissions-list").style.display = "none"; // Скрываем список
-  document.getElementById("admin-submission-details").style.display = "block"; // Показываем детали
+  document.getElementById("admin-submissions-list").style.display = "none";
+  document.getElementById("admin-submission-details").style.display = "block";
 
   const detailsDiv = document.getElementById('admin-question-view');
   detailsDiv.innerHTML = `
@@ -173,15 +166,14 @@ function viewSubmission(index) {
   `;
 
   const questionsForGradingDiv = document.getElementById('questions-for-grading');
-  questionsForGradingDiv.innerHTML = ''; // Очищаем предыдущие вопросы
+  questionsForGradingDiv.innerHTML = '';
 
   questions.forEach((q, qIndex) => {
     const questionBlock = document.createElement('div');
-    questionBlock.classList.add('question-block-admin'); // Для стилизации
+    questionBlock.classList.add('question-block-admin');
     
     let answerContent = sub.answers[qIndex] || 'Нет ответа';
-    // Для развернутых ответов можно использовать <pre> или стили для сохранения форматирования
-    answerContent = answerContent.replace(/\n/g, '<br>'); // Сохраняем переносы строк для отображения в HTML
+    answerContent = answerContent.replace(/\n/g, '<br>');
 
     if (q.type === 'РО') {
       questionBlock.innerHTML = `
@@ -191,7 +183,7 @@ function viewSubmission(index) {
         <div style="white-space: pre-wrap; background: #eee; padding: 10px; border-radius: 5px;">${answerContent}</div>
         <p>Оценка за РО: <input type="number" class="ro-score-input" data-q-index="${qIndex}" min="0" max="${q.score}" value="${sub.manualScoresRO[qIndex] || 0}"></p>
       `;
-    } else { // Для КО вопросов
+    } else {
       questionBlock.innerHTML = `
         <h4>Вопрос ${qIndex + 1} (${q.type}, ${q.score} балла):</h4>
         <p>${q.question.replace(/\n/g, '<br>')}</p>
@@ -210,13 +202,12 @@ function saveManualGrades() {
   let submissions = JSON.parse(localStorage.getItem('testSubmissions')) || [];
   const sub = submissions[currentAdminSubmissionIndex];
 
-  let newManualScoresRO = Array(questions.length).fill(0); // Сбрасываем и пересчитываем РО баллы
+  let newManualScoresRO = Array(questions.length).fill(0);
   let totalManualROScore = 0;
 
   document.querySelectorAll('.ro-score-input').forEach(input => {
     const qIndex = parseInt(input.dataset.qIndex);
     const score = parseInt(input.value) || 0;
-    // Проверяем, чтобы введенный балл не превышал максимальный для вопроса
     const maxScore = questions[qIndex].score;
     newManualScoresRO[qIndex] = Math.min(score, maxScore);
     totalManualROScore += newManualScoresRO[qIndex];
@@ -224,24 +215,31 @@ function saveManualGrades() {
 
   sub.manualScoresRO = newManualScoresRO;
   sub.finalScore = sub.autoScore + totalManualROScore;
-  sub.isGraded = true; // Отмечаем как проверенное
+  sub.isGraded = true;
 
-  submissions[currentAdminSubmissionIndex] = sub; // Обновляем объект в массиве
+  submissions[currentAdminSubmissionIndex] = sub;
   localStorage.setItem('testSubmissions', JSON.stringify(submissions));
 
   alert('Оценки сохранены!');
-  backToAdminList(); // Возвращаемся к списку после сохранения
+  backToAdminList();
 }
 
 function backToAdminList() {
-  currentAdminSubmissionIndex = -1; // Сбрасываем индекс
-  loadAdminSubmissionsList(); // Загружаем список заново
+  currentAdminSubmissionIndex = -1;
+  loadAdminSubmissionsList();
 }
-// ===================================================
+
+function backToMainScreen() {
+    document.getElementById("admin-panel-screen").style.display = "none";
+    document.getElementById("result-screen").style.display = "none";
+    document.getElementById("test-screen").style.display = "none";
+    document.getElementById("start-screen").style.display = "block";
+    clearInterval(timerInterval);
+    currentIndex = 0;
+    answers = [];
+}
 
 function showResultOfGradedTest(submissionId) {
-    // Эта функция может быть вызвана из start-screen, если студент хочет просмотреть свои оценки
-    // (потребует дополнительного UI для ввода ФИО/Класс и поиска в localStorage)
     let submissions = JSON.parse(localStorage.getItem('testSubmissions')) || [];
     const gradedSubmission = submissions.find(s => s.id === submissionId && s.isGraded);
 
@@ -255,11 +253,22 @@ function showResultOfGradedTest(submissionId) {
         document.getElementById("result-klass").textContent = gradedSubmission.klass;
         document.getElementById("total-score").textContent = gradedSubmission.finalScore;
         document.getElementById("result-title").textContent = `${gradedSubmission.testType} - Проверено!`;
-        // Можно добавить детализированный разбор по вопросам, если нужно
     } else {
-        alert('Результаты для данной работы пока недоступны или не проверены.');
+        alert('Результаты для данной работы пока недоступны или не проверены администратором.');
     }
 }
 
-// Функции showAdminPanel, viewSubmission, saveManualGrades, backToAdminList, showResultOfGradedTest
-// должны быть доступны глобально, как и остальные функции.
+// === НОВАЯ ФУНКЦИЯ: Проверка URL и добавление кнопки админа ===
+function initAdminButton() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+        const adminButton = document.createElement('button');
+        adminButton.textContent = 'Панель администратора';
+        adminButton.onclick = showAdminPanel;
+        adminButton.classList.add('admin-button-fixed'); // Применяем новый стиль
+        document.body.appendChild(adminButton);
+    }
+}
+
+// Вызываем эту функцию при загрузке страницы
+document.addEventListener('DOMContentLoaded', initAdminButton);
