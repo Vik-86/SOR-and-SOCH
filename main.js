@@ -3,6 +3,10 @@ let answers = [];
 let testType = "";
 let timerInterval;
 
+// === НОВЫЙ КОНСТАНТНЫЙ ПАРОЛЬ ДЛЯ АДМИНА ===
+const ADMIN_PASSWORD = "Gq0Kb7!4";
+// ===========================================
+
 function startTest(type) {
   testType = type;
   document.getElementById("start-screen").style.display = "none";
@@ -258,15 +262,20 @@ function showResultOfGradedTest(submissionId) {
     }
 }
 
-// === НОВАЯ ФУНКЦИЯ: Проверка URL и добавление кнопки админа ===
+// === ОБНОВЛЕННАЯ ФУНКЦИЯ: Проверка URL и запрос пароля ===
 function initAdminButton() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
-        const adminButton = document.createElement('button');
-        adminButton.textContent = 'Панель администратора';
-        adminButton.onclick = showAdminPanel;
-        adminButton.classList.add('admin-button-fixed'); // Применяем новый стиль
-        document.body.appendChild(adminButton);
+        const enteredPassword = prompt("Введите пароль для доступа к панели администратора:");
+        if (enteredPassword === ADMIN_PASSWORD) {
+            const adminButton = document.createElement('button');
+            adminButton.textContent = 'Панель администратора';
+            adminButton.onclick = showAdminPanel;
+            adminButton.classList.add('admin-button-fixed');
+            document.body.appendChild(adminButton);
+        } else {
+            alert("Неверный пароль администратора. Доступ запрещен.");
+        }
     }
 }
 
