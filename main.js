@@ -32,6 +32,21 @@ function showQuestion() {
   document.getElementById("q-text").textContent = q.question;
   document.getElementById("q-answer").value = answers[currentIndex] || "";
   document.getElementById("question-score").textContent = "Балл: " + q.score;
+
+  // ==== НОВЫЙ КОД ДЛЯ УПРАВЛЕНИЯ КНОПКАМИ ====
+  const nextBtn = document.querySelector('.next-question-btn');
+  const finishBtn = document.querySelector('.finish-test-btn');
+
+  if (currentIndex === questions.length - 1) {
+    // Если это последний вопрос
+    if (nextBtn) nextBtn.style.display = 'none'; // Скрываем кнопку "Далее"
+    if (finishBtn) finishBtn.style.display = 'inline-block'; // Показываем кнопку "Завершить"
+  } else {
+    // Если это не последний вопрос
+    if (nextBtn) nextBtn.style.display = 'inline-block'; // Показываем кнопку "Далее"
+    if (finishBtn) finishBtn.style.display = 'none'; // Скрываем кнопку "Завершить"
+  }
+  // ===========================================
 }
 
 function prevQuestion() {
@@ -40,6 +55,8 @@ function prevQuestion() {
     currentIndex--;
     showQuestion();
   }
+  // Можно добавить логику для скрытия/отображения кнопки "Назад" на первом вопросе,
+  // но обычно она просто неактивна или невидима.
 }
 
 function confirmFinish() {
@@ -71,6 +88,11 @@ function nextQuestion() {
     currentIndex++;
     showQuestion();
   } else {
-    alert("Это был последний вопрос.");
+    // Если это был последний вопрос и нажата кнопка "Далее" (которая должна быть скрыта),
+    // или если пользователь все равно пытается перейти далее после последнего вопроса
+    // можно вызвать confirmFinish() здесь, или оставить поведение, где кнопка "Далее" скрыта.
+    // Так как кнопка "Далее" будет скрыта на последнем вопросе, этот 'else' блок станет менее актуальным.
+    // alert("Это был последний вопрос."); // Убрал alert, так как кнопка "Далее" будет скрыта.
+    confirmFinish(); // Завершаем тест, если пытаемся перейти дальше последнего вопроса
   }
 }
